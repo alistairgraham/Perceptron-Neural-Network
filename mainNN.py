@@ -33,7 +33,6 @@ def loadImages (filename):
         categoryLine = file.readline()
         
         # Get image output, black or white
-        print(list(categoryLine))
         category = list(categoryLine)[1]
         if category == 'X':
             category = 1
@@ -58,25 +57,33 @@ def loadImages (filename):
             imgData.append(rowData)
             
         imageList.append(Image(imgData, category))
+        file.readline()
     file.close()
     return imageList
 
-def constructRandomFeatures (rowLength, colLength):
+def constructRandomFeatures (rowLength, colLength, numOfFeatures):
     numOfPixels = 4
-    rows = []
-    cols = []
-    connections = []
-    # Create random values for rows, cols of pixels
-    # and random true or false values for connections to the four pixels
-    for i in range(0, numOfPixels):
-        rows.append(random.randint(0, rowLength))
-        cols.append(random.randint(0, colLength))
-        connections.append(random.randint(0,1))
+    featureList = []    
     
-    return Feature(rows, cols, connections)
+    for i in range(0, numOfFeatures):
+        rows = []
+        cols = []
+        connections = []
+        # Create random values for rows, cols of pixels
+        # and random true or false values for connections to the four pixels
+        for i in range(0, numOfPixels):
+            rows.append(random.randint(0, rowLength-1))
+            cols.append(random.randint(0, colLength-1))
+            connections.append(random.randint(0,1))
+        featureList.append(Feature(rows, cols, connections))
+    
+    return featureList
 
-def createInputs (imageList, featureList):
-    
+def createInputs (imageList, feature):
+    imagesForInput = []
+    imageInputs = []
+    for image in imageList:
+        
     return
 
 """def trainPerceptron (perceptron, imageInputsList):
@@ -90,8 +97,8 @@ def createInputs (imageList, featureList):
 
 def main():
     imageList = loadImages(sys.argv[1])
-    featureList = constructRandomFeatures(imageList[0].getData[0].length, imageList[0].getData()[0][0].length)
-    #imageInputsList = createInputs(imageList, featureList)
+    featureList = constructRandomFeatures(len(imageList[0].getData[0]), len(imageList[0].getData[0][0]), 50)
+    imageInputsList = createInputs(imageList, featureList)
     #perceptron = Perceptron()
     #trainPerceptron(perceptron, imageInputsList)
     

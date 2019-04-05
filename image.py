@@ -18,4 +18,6 @@ class Image:
 class Feature:
     
     def __init__(self, rowList, colList, connectionList):
-        return
+        self.rowList = rowList
+        self.colList = colList
+        self.connectionList = connectionList
