@@ -11,10 +11,17 @@ class Image:
     def __init__(self, imgData, category):
         self.imgData = imgData
         self.category = category
+        self.featureList = []
     
     @property
     def getData(self):
         return self.imgData
+    
+    def addFeature(self, feature):
+        self.featureList.append(feature)
+        
+    def getFeature(self, index):
+        return self.featureList[index]
         
 class Feature:
     
@@ -30,18 +37,15 @@ class Perceptron:
         self.weights = []
         
         #bias
-        weights.append(1)
-        for i in range(0, numOfFeatures)
+        self.weights.append(1)
+        for i in range(0, numOfFeatures):
             randomInt = random.randint(0,1)
             if (randomInt == 0):
-                weights.append(-1)
+                self.weights.append(float(-1))
             elif (randomInt == 1):
-                weights.append(1):
+                self.weights.append(float(1))
             else:
                 raise ValueError
-        
-        return
-    
     
     
     

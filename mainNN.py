@@ -80,12 +80,10 @@ def constructRandomFeatures (rowLength, colLength, numOfFeatures, numOfPixels):
     return featureList
 
 def createInputs (imageList, featureList, numOfPixels):
-    images = []
     
     for image in imageList:
-        imageInputs = []
-        # Bias
-        imageInputs.append(1)
+        # Biass
+        image.addFeature(1)
         
         for f in featureList:
             sum = 0
@@ -93,20 +91,45 @@ def createInputs (imageList, featureList, numOfPixels):
                 if (int(image.getData[f.rowList[i]][f.colList[i]]) == int(f.connectionList[i])):
                     sum += 1
             if (sum >= 3):
-                imageInputs.append(1)
+                image.addFeature(1)
             else:
-                imageInputs.append(0)
-        images.append(imageInputs)
+                image.addFeature(0)
         
-    return images
 
-def trainPerceptron (perceptron, imageInputsList):
-    if not isinstance(perceptron, Perceptron):
-        raise TypeError
+def trainPerceptron (perceptron, imageList, maxRepitions, trainingDelta):
+    
+    cycleCount = 0
+    correctCount = 0
+    
+    while (correctCount < len(imageList) and cycleCount < maxRepitions):
+        correctCount = 0
         
-    return
+        for image in imageList:
+            y = predict(perceptron, image.featureList)
+            d = image.category
+            
+            if (y == d):
+                correctCount += 1
+            else:
+                for i in range(1, len(perceptron.weights)):
+                    perceptron.weights[i] += trainingDelta * (d - y) * image.featureList[i]
+                
+        cycleCount += 1
+    
+    print("\nAccuracy = " + str((correctCount/len(imageList))*100) + "%")
 
-
+def predict(perceptron, featureList):
+    sum = 0
+    count = 0
+    # Get some of weights * features
+    for i in range(0, len(featureList)):
+        sum += perceptron.weights[count] * featureList[count]
+        count += 1
+    
+    if (sum > 1):
+        return 1
+    else:
+        return 0
 
 
 def main():
@@ -118,10 +141,19 @@ def main():
     numOfCols = len(imageList[0].getData[0][0])
     featureList = constructRandomFeatures(numOfRows, numOfCols, numOfFeatures, numOfPixels)
     
-    imageInputsList = createInputs(imageList, featureList, numOfPixels)
+    createInputs(imageList, featureList, numOfPixels)
     perceptron = Perceptron(numOfFeatures)
-    trainPerceptron(perceptron, imageInputsList)
-    
+    k = 150
+    trainingDelta = 0.1
+    trainPerceptron(perceptron, imageList, k, trainingDelta)
     
 main()
+
+
+
+
+
+
+
+
 
