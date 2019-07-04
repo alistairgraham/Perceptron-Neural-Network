@@ -24,7 +24,6 @@ def loadImages (filename):
         # Check if EOF
         if not filetypeLine:
             break
-        
         # Get filetype
         filetype = filetypeLine.split()[0]
         if filetype != "P1":
@@ -32,7 +31,6 @@ def loadImages (filename):
             raise ValueError
         
         categoryLine = file.readline()
-        
         # Get image output, black or white
         category = list(categoryLine)[1]
         if category == 'X':
@@ -62,6 +60,7 @@ def loadImages (filename):
     file.close()
     return imageList
 
+
 def constructRandomFeatures (rowLength, colLength, numOfFeatures, numOfPixels):
     featureList = []    
     
@@ -79,8 +78,8 @@ def constructRandomFeatures (rowLength, colLength, numOfFeatures, numOfPixels):
     
     return featureList
 
+
 def createInputs (imageList, featureList, numOfPixels):
-    
     for image in imageList:
         # Biass
         image.addFeature(1)
@@ -97,13 +96,11 @@ def createInputs (imageList, featureList, numOfPixels):
         
 
 def trainPerceptron (perceptron, imageList, maxRepitions, trainingDelta):
-    
     cycleCount = 0
     correctCount = 0
     
     while (correctCount < len(imageList) and cycleCount < maxRepitions):
         correctCount = 0
-        
         for image in imageList:
             y = predict(perceptron, image.featureList)
             d = image.category
@@ -112,11 +109,10 @@ def trainPerceptron (perceptron, imageList, maxRepitions, trainingDelta):
                 correctCount += 1
             else:
                 for i in range(1, len(perceptron.weights)):
-                    perceptron.weights[i] += trainingDelta * (d - y) * image.featureList[i]
-                
+                    perceptron.weights[i] += trainingDelta * (d - y) * image.featureList[i]  
         cycleCount += 1
-    
     print("\nAccuracy = " + str((correctCount/len(imageList))*100) + "%")
+    
 
 def predict(perceptron, featureList):
     sum = 0
@@ -134,7 +130,6 @@ def predict(perceptron, featureList):
 
 def main():
     imageList = loadImages(sys.argv[1])
-    
     numOfFeatures = 50
     numOfPixels = 4
     numOfRows = len(imageList[0].getData[0])
@@ -148,11 +143,6 @@ def main():
     trainPerceptron(perceptron, imageList, k, trainingDelta)
     
 main()
-
-
-
-
-
 
 
 
